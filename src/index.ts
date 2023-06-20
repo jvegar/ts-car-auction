@@ -24,14 +24,13 @@ const init = async () => {
     if (!queriedGroup.length) {
       const createdGroupId = await groupCollection.create(group);
       console.log(`Group created: ${createdGroupId}`);
-      for (const offer of group.offers) {
-        const queriedOffers = await offerCollection.read({offer_id: offer.id});
-        if (!queriedOffers.length) {
-          const offerDetail = await getOfferDetail(OFFER_DETAIL_URL.replace("[offer_id]", offer.id));
-          console.log("offerDetail: ", offerDetail);
-          const createdOfferId = await offerCollection.create(offerDetail.data);
-          console.log(`Offer created: ${createdOfferId}`);
-        }
+    }
+    for (const offer of group.offers) {
+      const queriedOffers = await offerCollection.read({offer_id: offer.id});
+      if (!queriedOffers.length) {
+        const offerDetail = await getOfferDetail(OFFER_DETAIL_URL.replace("[offer_id]", offer.id));
+        const createdOfferId = await offerCollection.create(offerDetail.data);
+        console.log(`Offer created: ${createdOfferId}`);
       }
     }
   }
