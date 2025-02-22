@@ -1,156 +1,99 @@
-# Node.js Express API with TypeScript 4
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+</p>
 
+[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
+[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-![CircleCI branch](https://img.shields.io/circleci/project/github/RedSparr0w/node-csgo-parser/master.svg?style=flat-square)
-![npm](https://img.shields.io/npm/dm/localeval.svg?style=flat-square)
-![Plugin on redmine.org](https://img.shields.io/redmine/plugin/stars/redmine_xlsx_format_issue_exporter.svg?style=flat-square)
-![onix](https://img.shields.io/badge/onix-systems-blue.svg)
-
-> Node.js Express API with TypeScript 4. Supports MongoDB
+  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
+    <p align="center">
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
+<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
+<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
+<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
+<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
+<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
+<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
+  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
+    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
+  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
+</p>
+  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
+  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 ## Description
-This generator will help you to build your own Node.js Express Mongodb API using TypeScript 4.
 
-### Project Introduction
-- suppot ES6/ES7 features
-- using tslint followed [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)
+[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Features
-##### Authentication:
-- passport local strategy
-- jwt authentication
-- OAuth2.0 Server (Authorization code grant, Refresh token grant)
-##### Session Storage:
-- MongoDB
-- Redis
-##### Integration testing
-- mocha
-- chai
-- supertest
-
-## Requirements
-
-- node >= 14
-- npm >= 6
-- mongodb >= 4.0
-- typescript >= 4.0
-
-## Installation
-
-First, install [Yeoman](http://yeoman.io) and generator-node-express-typescript-api using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+## Project setup
 
 ```bash
-npm install -g yo
-npm install -g generator-node-express-typescript-api
+$ npm install
 ```
 
-Then generate your new project:
+## Compile and run the project
 
 ```bash
-yo node-express-typescript-api
+# development
+$ npm run start
+
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
 ```
-## App skeleton
-```
-.
-├── LICENSE
-├── README.md
-├── nodemon.json
-├── package.json
-├── src
-│   ├── components
-│   │   ├── Auth
-│   │   │   ├── index.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── service.ts
-│   │   │   └── validation.ts
-│   │   ├── User
-│   │   │   ├── index.ts
-│   │   │   ├── interface.ts
-│   │   │   ├── model.ts
-│   │   │   ├── service.ts
-│   │   │   └── validation.ts
-│   │   ├── index.ts
-│   │   └── validation.ts
-│   ├── config
-│   │   ├── connection
-│   │   │   └── connection.ts
-│   │   ├── env
-│   │   │   └── index.ts
-│   │   ├── error
-│   │   │   ├── index.ts
-│   │   │   └── sendHttpError.ts
-│   │   ├── middleware
-│   │   │   ├── middleware.ts
-│   │   │   └── passport.ts
-│   │   └── server
-│   │       ├── ServerInterface.ts
-│   │       ├── index.ts
-│   │       ├── server.ts
-│   │       └── serverHandlers.ts
-│   └── routes
-│       ├── AuthRouter.ts
-│       ├── UserRouter.ts
-│       └── index.ts
-├── swaggerDef.js
-├── tsconfig.json
-└── .eslintrc.json
-```
-## Running the API
-### Development
-To start the application in development mode, run:
+
+## Run tests
 
 ```bash
-npm install -g nodemon
-npm install -g ts-node
-npm install -g typescript
-npm install
+# unit tests
+$ npm run test
+
+# e2e tests
+$ npm run test:e2e
+
+# test coverage
+$ npm run test:cov
 ```
 
-Start the application in dev env:
-```
-nodemon
-```
-Start the application in production env:
+## Deployment
 
-Install ts pm2 and typescript compiler:
-```
-npm install -g pm2
-pm2 install typescript
-```
+When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
-example start with scale on 2 core:
-```
-pm2 start ./src/index.ts -i 2 --no-daemon
-```
+If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
-Express server listening on http://localhost:3000/, in development mode
-The developer mode will watch your changes then will transpile the TypeScript code and re-run the node application automatically.
-
-### Testing
-To run integration tests:
 ```bash
-npm test
+$ npm install -g mau
+$ mau deploy
 ```
 
-## Set up environment
-In root folder you can find `.env`. You can use this config or change it for your purposes.
-If you want to add some new variables, you also need to add them to interface and config object (Look `src/config/index.ts`)
+With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Usage as OAuth2.0 Server
-To use this generator as OAuth2.0 server you should implement client side, that will be handle your redirectUris and make requests to `/auth/token/` route. [Read more about OAuth2.0](https://alexbilbie.com/guide-to-oauth-2-grants/)
+## Resources
 
-Swagger documentation will be available on route:
-```bash
-http://localhost:3000/docs
-```
-![Alt Text](https://i.ibb.co/b6SdyQV/gif1.gif)
+Check out a few resources that may come in handy when working with NestJS:
 
-## Getting To Know Yeoman
+- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
+- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
+- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
+- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
+- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
+- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
+- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
+- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
 
- * Yeoman has a heart of gold.
- * Yeoman is a person with feelings and opinions, but is very easy to work with.
- * Yeoman can be too opinionated at times but is easily convinced not to be.
- * Feel free to [learn more about Yeoman](http://yeoman.io/).
+## Support
 
-[travis-image]: https://travis-ci.org/caiobsouza/generator-ts-node-api.svg?branch=master
-[travis-url]: https://travis-ci.org/caiobsouza/generator-ts-node-api
+Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+
+## Stay in touch
+
+- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
+- Website - [https://nestjs.com](https://nestjs.com/)
+- Twitter - [@nestframework](https://twitter.com/nestframework)
+
+## License
+
+Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).

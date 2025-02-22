@@ -13,7 +13,7 @@ aws lambda create-function --function-name car-auction-ingestion --runtime "node
 ### Update lambda
 
 ```sh
-aws lambda update-function-code --function-name car-auction-ingestion --zip-file "fileb://dist/index.zip" --handler index.handler
+aws lambda update-function-code --function-name car-auction-ingestion --zip-file "fileb://dist/index.zip"
 ```
 
 ## Prerequisites

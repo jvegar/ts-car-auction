@@ -4,10 +4,12 @@
   "main": "index.js",
   "workspaces": [
     "apps/api",
-    "apps/cron-jobs"
+    "apps/cron-job"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:cron-job": "npm run -w apps/cron-job build",
+    "dev:cron-job": "npm run -w apps/cron-job dev",
+    "dev:api": "npm run -w apps/api dev"
   },
   "keywords": [],
   "author": "",
