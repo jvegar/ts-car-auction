@@ -14,9 +14,10 @@ export class OfferService {
         return newOffer.save();
     }
 
-    async findAll(page: number = 1, limit: number = 10): Promise<Offer[]> {
-        const skip = (page - 1) * limit; // Calculate the number of documents to skip
-        return this.offerModel.find().skip(skip).limit(limit).exec();
+    async findAll(page: number, limit: number): Promise<[Offer[], number]> {
+        const offers = await this.offerModel.find().skip((page - 1) * limit).limit(limit).exec();
+        const totalCount = await this.offerModel.countDocuments().exec();
+        return [offers, totalCount];
     }
 
     async findOne(id: string): Promise<Offer> {

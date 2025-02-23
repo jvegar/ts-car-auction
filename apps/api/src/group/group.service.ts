@@ -14,12 +14,14 @@ export class GroupService {
     return createdGroup.save();
   }
 
-  async findAll(page: number = 1, limit: number = 10): Promise<Group[]> {
+  async findAll(page: number = 1, limit: number = 10): Promise<[Group[], number]> {
     const skip = (page - 1) * limit; // Calculate the number of documents to skip
-    return this.groupModel.find()
+    const groups = await this.groupModel.find()
         .skip(skip)
         .limit(limit)
         .exec();
+    const totalCount = await this.groupModel.countDocuments().exec(); // Get total count of groups
+    return [groups, totalCount];
   }
 
   async findOne(id: string): Promise<Group> {

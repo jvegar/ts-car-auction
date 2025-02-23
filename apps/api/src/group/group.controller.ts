@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestj
 import { GroupService } from './group.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Group } from './entities/group.entity';
 
 @Controller('groups')
 export class GroupController {
@@ -13,8 +14,19 @@ export class GroupController {
   }
 
   @Get()
-  findAll(@Query('page') page: number, @Query('limit') limit: number) {
-    return this.groupService.findAll(page, limit);
+  async findAll(@Query('page') page: string, @Query('limit') limit: string): Promise<{ groups: Group[], totalCount: number, currentPage: number, totalPages: number }> {
+    const pageNumber = parseInt(page, 10) || 1; // Default to page 1
+    const limitNumber = parseInt(limit, 10) || 10; // Default to limit 10
+
+    const [groups, totalCount] = await this.groupService.findAll(pageNumber, limitNumber);
+    const totalPages = Math.ceil(totalCount / limitNumber);
+
+    return {
+        groups,
+        totalCount,
+        currentPage: pageNumber,
+        totalPages,
+    };
   }
 
   @Get(':id')

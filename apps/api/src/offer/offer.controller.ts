@@ -14,10 +14,19 @@ export class OfferController {
   }
 
   @Get()
-  findAll(@Query('page') page: string, @Query('limit') limit: string): Promise<Offer[]> {
+  async findAll(@Query('page') page: string, @Query('limit') limit: string): Promise<{ offers: Offer[], totalCount: number, currentPage: number, totalPages: number }> {
     const pageNumber = parseInt(page, 10) || 1; // Default to page 1
     const limitNumber = parseInt(limit, 10) || 10; // Default to limit 10
-    return this.offerService.findAll(pageNumber, limitNumber);
+
+    const [offers, totalCount] = await this.offerService.findAll(pageNumber, limitNumber);
+    const totalPages = Math.ceil(totalCount / limitNumber);
+
+    return {
+        offers,
+        totalCount,
+        currentPage: pageNumber,
+        totalPages,
+    };
   }
 
   @Get(':id')
