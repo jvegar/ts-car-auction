@@ -9,7 +9,7 @@
   "scripts": {
     "build:cron-job": "npm run -w apps/cron-job build",
     "dev:cron-job": "npm run -w apps/cron-job dev",
-    "dev:api": "npm run -w apps/api dev"
+    "start:dev": "npm run -w apps/api start:dev"
   },
   "keywords": [],
   "author": "",
