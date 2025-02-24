@@ -4,12 +4,14 @@
   "main": "index.js",
   "workspaces": [
     "apps/api",
-    "apps/cron-job"
+    "apps/cron-job",
+    "web"
   ],
   "scripts": {
     "build:cron-job": "npm run -w apps/cron-job build",
     "dev:cron-job": "npm run -w apps/cron-job dev",
-    "start:dev": "npm run -w apps/api start:dev"
+    "start:dev": "npm run -w apps/api start:dev",
+    "start:web": "npm run -w web dev"
   },
   "keywords": [],
   "author": "",

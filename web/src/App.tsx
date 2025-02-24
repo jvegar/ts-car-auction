@@ -1,7 +1,16 @@
-import { useState, useEffect } from 'react'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination, Paper } from '@mui/material'
-import './App.css'
-
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Paper,
+} from "@mui/material";
+import "./App.css";
 
 interface Offer {
   offer_id: string;
@@ -21,17 +30,17 @@ interface Offer {
   base_price: number;
   win_now: number | null;
   live_tag: string | null;
-  close_date: string;  
+  close_date: string;
   images: {
     thumb: string;
     image: string;
-  }[]
+  }[];
   owner: {
-      id: number;
-      name: string | null;
-      path: string;
-      user_id: number;
-      cuu: number;
+    id: number;
+    name: string | null;
+    path: string;
+    user_id: number;
+    cuu: number;
   };
   description: {
     attributes: {
@@ -57,42 +66,52 @@ interface Offer {
 }
 
 function App() {
-  const [offers, setOffers] = useState<Offer[]>([])
-  const [filter, setFilter] = useState('')
-  const [page, setPage] = useState(0)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [totalCount, setTotalCount] = useState(0)
+  const [filter, setFilter] = useState("");
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
 
   const offersUrl = import.meta.env.VITE_OFFERS_URL; // Access the offers URL from the environment variable
 
-  useEffect(() => {
-    const fetchOffers = async () => {
-      const response = await fetch(`${offersUrl}?page=${page + 1}&limit=${rowsPerPage}`)
-      const data = await response.json()
-      setOffers(data.offers)
-      setTotalCount(data.totalCount)
-    }
-
-    fetchOffers()
-  }, [page, rowsPerPage, offersUrl]) // Add offersUrl to the dependency array
+  // Use useQuery to fetch offers
+  const {
+    data: offers,
+    isLoading,
+    isError,
+  } = useQuery<Offer[]>({
+    queryKey: ["offers", page, rowsPerPage],
+    queryFn: async () => {
+      const response = await fetch(
+        `${offersUrl}?page=${page + 1}&limit=${rowsPerPage}`
+      );
+      const data = await response.json();
+      setTotalCount(data.totalCount); // Set total count from response
+      return data.offers; // Return offers
+    },
+  });
 
   const handleChangePage = (_: any, newPage: number) => {
-    setPage(newPage)
-  }
+    setPage(newPage);
+  };
 
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10))
-    setPage(0) // Reset to the first page
-  }
+  const handleChangeRowsPerPage = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to the first page
+  };
+
+  if (isLoading) return <div>Loading...</div>; // Show loading state
+  if (isError) return <div>Error fetching offers</div>; // Show error state
 
   return (
     <>
       <div>
-        <input 
-          type="text" 
-          placeholder="Filter offers" 
-          value={filter} 
-          onChange={(e) => setFilter(e.target.value)} 
+        <input
+          type="text"
+          placeholder="Filter offers"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
         />
       </div>
       <TableContainer component={Paper}>
@@ -112,20 +131,26 @@ function App() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {offers.map((offer) => (
-              <TableRow key={offer.offer_id}>
-                <TableCell>{offer.offer_id}</TableCell>
-                <TableCell>{offer.title}</TableCell>
-                <TableCell>{offer.type}</TableCell>
-                <TableCell>{offer.financing_tag ? 'Yes' : 'No'}</TableCell>
-                <TableCell>{offer.information_quality}</TableCell>
-                <TableCell>{offer.complexity_offering}</TableCell>
-                <TableCell>{offer.status}</TableCell>
-                <TableCell>{offer.owner?.name}</TableCell>
-                <TableCell>{offer.with_visit ? 'Yes' : 'No'}</TableCell>
-                <TableCell>{offer.with_virtual_inspection ? 'Yes' : 'No'}</TableCell>
-              </TableRow>
-            ))}
+            {offers?.map(
+              (
+                offer // Use data from useQuery
+              ) => (
+                <TableRow key={offer.offer_id}>
+                  <TableCell>{offer.offer_id}</TableCell>
+                  <TableCell>{offer.title}</TableCell>
+                  <TableCell>{offer.type}</TableCell>
+                  <TableCell>{offer.financing_tag ? "Yes" : "No"}</TableCell>
+                  <TableCell>{offer.information_quality}</TableCell>
+                  <TableCell>{offer.complexity_offering}</TableCell>
+                  <TableCell>{offer.status}</TableCell>
+                  <TableCell>{offer.owner?.name}</TableCell>
+                  <TableCell>{offer.with_visit ? "Yes" : "No"}</TableCell>
+                  <TableCell>
+                    {offer.with_virtual_inspection ? "Yes" : "No"}
+                  </TableCell>
+                </TableRow>
+              )
+            )}
           </TableBody>
         </Table>
       </TableContainer>
@@ -139,7 +164,7 @@ function App() {
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
