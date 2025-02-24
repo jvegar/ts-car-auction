@@ -63,16 +63,18 @@ function App() {
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [totalCount, setTotalCount] = useState(0)
 
+  const offersUrl = import.meta.env.VITE_OFFERS_URL; // Access the offers URL from the environment variable
+
   useEffect(() => {
     const fetchOffers = async () => {
-      const response = await fetch(`http://localhost:3000/offers?page=${page + 1}&limit=${rowsPerPage}`)
+      const response = await fetch(`${offersUrl}?page=${page + 1}&limit=${rowsPerPage}`)
       const data = await response.json()
       setOffers(data.offers)
       setTotalCount(data.totalCount)
     }
 
     fetchOffers()
-  }, [page, rowsPerPage])
+  }, [page, rowsPerPage, offersUrl]) // Add offersUrl to the dependency array
 
   const handleChangePage = (_: any, newPage: number) => {
     setPage(newPage)
