@@ -11,6 +11,7 @@ import {
   Paper,
 } from "@mui/material";
 import "./App.css";
+import useDebounce from "./hooks/useDebounce";
 
 interface Offer {
   offer_id: string;
@@ -70,25 +71,44 @@ function App() {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
+  const [sortField, setSortField] = useState("title");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  const offersUrl = import.meta.env.VITE_OFFERS_URL; // Access the offers URL from the environment variable
+  const debouncedFilter = useDebounce(filter, 300);
 
-  // Use useQuery to fetch offers
+  const offersUrl = import.meta.env.VITE_OFFERS_URL;
+
   const {
     data: offers,
     isLoading,
     isError,
   } = useQuery<Offer[]>({
-    queryKey: ["offers", page, rowsPerPage],
+    queryKey: [
+      "offers",
+      page,
+      rowsPerPage,
+      sortField,
+      sortOrder,
+      debouncedFilter,
+    ],
     queryFn: async () => {
       const response = await fetch(
-        `${offersUrl}?page=${page + 1}&limit=${rowsPerPage}`
+        `${offersUrl}?page=${page + 1}&limit=${rowsPerPage}&sort=${sortField}:${sortOrder}&search=${debouncedFilter}`
       );
       const data = await response.json();
-      setTotalCount(data.totalCount); // Set total count from response
-      return data.offers; // Return offers
+      setTotalCount(data.totalCount);
+      return data.offers;
     },
+    enabled: !!debouncedFilter || debouncedFilter === "",
   });
+
+  const handleSort = (field: string) => {
+    const newSortOrder =
+      sortField === field && sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(newSortOrder);
+    setPage(0);
+  };
 
   const handleChangePage = (_: any, newPage: number) => {
     setPage(newPage);
@@ -98,11 +118,11 @@ function App() {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to the first page
+    setPage(0);
   };
 
-  if (isLoading) return <div>Loading...</div>; // Show loading state
-  if (isError) return <div>Error fetching offers</div>; // Show error state
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching offers</div>;
 
   return (
     <>
@@ -118,39 +138,49 @@ function App() {
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Offer ID</TableCell>
-              <TableCell>Title</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Financing Tag</TableCell>
-              <TableCell>Information Quality</TableCell>
-              <TableCell>Complexity Offering</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Owner Name</TableCell>
-              <TableCell>With Visit</TableCell>
-              <TableCell>With Virtual Inspection</TableCell>
+              <TableCell onClick={() => handleSort("offer_id")}>
+                Offer ID
+              </TableCell>
+              <TableCell onClick={() => handleSort("title")}>Title</TableCell>
+              <TableCell onClick={() => handleSort("type")}>Type</TableCell>
+              <TableCell onClick={() => handleSort("financing_tag")}>
+                Financing Tag
+              </TableCell>
+              <TableCell onClick={() => handleSort("information_quality")}>
+                Information Quality
+              </TableCell>
+              <TableCell onClick={() => handleSort("complexity_offering")}>
+                Complexity Offering
+              </TableCell>
+              <TableCell onClick={() => handleSort("status")}>Status</TableCell>
+              <TableCell onClick={() => handleSort("owner.name")}>
+                Owner Name
+              </TableCell>
+              <TableCell onClick={() => handleSort("with_visit")}>
+                With Visit
+              </TableCell>
+              <TableCell onClick={() => handleSort("with_virtual_inspection")}>
+                With Virtual Inspection
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {offers?.map(
-              (
-                offer // Use data from useQuery
-              ) => (
-                <TableRow key={offer.offer_id}>
-                  <TableCell>{offer.offer_id}</TableCell>
-                  <TableCell>{offer.title}</TableCell>
-                  <TableCell>{offer.type}</TableCell>
-                  <TableCell>{offer.financing_tag ? "Yes" : "No"}</TableCell>
-                  <TableCell>{offer.information_quality}</TableCell>
-                  <TableCell>{offer.complexity_offering}</TableCell>
-                  <TableCell>{offer.status}</TableCell>
-                  <TableCell>{offer.owner?.name}</TableCell>
-                  <TableCell>{offer.with_visit ? "Yes" : "No"}</TableCell>
-                  <TableCell>
-                    {offer.with_virtual_inspection ? "Yes" : "No"}
-                  </TableCell>
-                </TableRow>
-              )
-            )}
+            {offers?.map((offer) => (
+              <TableRow key={offer.offer_id}>
+                <TableCell>{offer.offer_id}</TableCell>
+                <TableCell>{offer.title}</TableCell>
+                <TableCell>{offer.type}</TableCell>
+                <TableCell>{offer.financing_tag ? "Yes" : "No"}</TableCell>
+                <TableCell>{offer.information_quality}</TableCell>
+                <TableCell>{offer.complexity_offering}</TableCell>
+                <TableCell>{offer.status}</TableCell>
+                <TableCell>{offer.owner?.name}</TableCell>
+                <TableCell>{offer.with_visit ? "Yes" : "No"}</TableCell>
+                <TableCell>
+                  {offer.with_virtual_inspection ? "Yes" : "No"}
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
