@@ -1,4 +1,13 @@
-import { Controller, Get, Query, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Query,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { OfferService } from './offer.service';
 import { CreateOfferDto } from './dto/create-offer.dto';
 import { UpdateOfferDto } from './dto/update-offer.dto';
@@ -14,18 +23,33 @@ export class OfferController {
   }
 
   @Get()
-  async findAll(@Query('page') page: string, @Query('limit') limit: string): Promise<{ offers: Offer[], totalCount: number, currentPage: number, totalPages: number }> {
+  async findAll(
+    @Query('page') page: string,
+    @Query('limit') limit: string,
+    @Query('search') search: string,
+    @Query('sort') sort: string,
+  ): Promise<{
+    offers: Offer[];
+    totalCount: number;
+    currentPage: number;
+    totalPages: number;
+  }> {
     const pageNumber = parseInt(page, 10) || 1; // Default to page 1
     const limitNumber = parseInt(limit, 10) || 10; // Default to limit 10
 
-    const [offers, totalCount] = await this.offerService.findAll(pageNumber, limitNumber);
+    const [offers, totalCount] = await this.offerService.findAll(
+      pageNumber,
+      limitNumber,
+      search,
+      sort,
+    );
     const totalPages = Math.ceil(totalCount / limitNumber);
 
     return {
-        offers,
-        totalCount,
-        currentPage: pageNumber,
-        totalPages,
+      offers,
+      totalCount,
+      currentPage: pageNumber,
+      totalPages,
     };
   }
 
@@ -35,7 +59,10 @@ export class OfferController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateOfferDto: UpdateOfferDto): Promise<Offer> {
+  update(
+    @Param('id') id: string,
+    @Body() updateOfferDto: UpdateOfferDto,
+  ): Promise<Offer> {
     return this.offerService.update(id, updateOfferDto);
   }
 

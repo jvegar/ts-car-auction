@@ -5,10 +5,10 @@ import { OfferService } from './offer.service';
 import { OfferController } from './offer.controller';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([{ name: Offer.name, schema: OfferSchema }]),
-    ],
-    controllers: [OfferController],
-    providers: [OfferService],
+  imports: [
+    MongooseModule.forFeature([{ name: Offer.name, schema: OfferSchema }]),
+  ],
+  controllers: [OfferController],
+  providers: [OfferService],
 })
 export class OfferModule {}
